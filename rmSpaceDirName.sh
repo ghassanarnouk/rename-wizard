@@ -1,32 +1,40 @@
 #!/bin/bash
 
-# Specify the directory path
+#
+#
+#
+#
+#
+#
+# specify the directory path
 echo "Please specify the directory path:"
-read dir_path
+read dirPath
 
-# Check if the directory path is valid
-if [[ ! -d "$dir_path" ]]; then
+# check if the directory path is valid
+if [[ ! -d "$dirPath" ]]; then
   echo "ERROR: directory not found!"
   exit 1
 fi
 
 # Use find to get a list of directories and subdirectories
+
 # It starts modifying the subdirectories first
-find "$dir_path" -depth -type d -print0 | while IFS= read -r -d '' dir; do
+find "$dirPath" -depth -type d -print0 | while IFS= read -r -d '' dir; do
   # Extract the parent directory and directory name
-  parent_dir=$(dirname "$dir")
-  base_name=$(basename "$dir")
+  parentDir=$(dirname "$dir")
+  baseName=$(basename "$dir")
 
   # Remove spaces from the directory name
-  new_dir_name=$(echo "$base_name" | tr -d ' ')
+  new_dir_name=$(echo "$baseName" | tr -d ' ')
 
   # Check if the name needs to be changed
-  if [[ "$base_name" != "$new_dir_name" ]]; then
+  if [[ "$baseName" != "$new_dir_name" ]]; then
     # Rename the directory
-    mv "$dir" "$parent_dir/$new_dir_name"
+    mv "$dir" "$parentDir/$new_dir_name"
     echo "Removed spaces from:$dir"
   fi
+  # TODO: add a return code variable (rc) with a value.
 done
 
-# TODO: add a condition to print another message if no spaces were removed
-echo "Spaces removed from directory names in $dir_path and its subdirectories."
+# TODO: add a condition to print another message if no spaces were removed. If rc = VALUE, then print the message below. Otherwise, print nothing happened
+echo "Spaces removed from directory names in $dirPath and its subdirectories."
